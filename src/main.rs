@@ -105,7 +105,8 @@ fn do_stop() {
 fn do_total() {
     let path = Path::new("plt.toml");
     let config = config::Config::gather();
-    
+    let email = config.email();
+
     // See if the file exists if it does load it.
     if path.exists() {
         let toml_str = fs::read_to_string(path).unwrap();
@@ -113,9 +114,11 @@ fn do_total() {
 
         let mut duration = chrono::Duration::days(0);
         for elem in timelog.entries.iter() {
-            duration = duration + ( elem.stop.unwrap_or_else( || elem.start ) - elem.start );
+            if elem.email == *email {
+                duration = duration + ( elem.stop.unwrap_or_else( || elem.start ) - elem.start );
+            }
         }
-        println!( "{}:{} H:M", duration.num_hours(), duration.num_minutes());
+        println!( "{} {}:{} H:M", email, duration.num_hours(), duration.num_minutes());
 
     } else {
         println!("Warning: No time log exists")
