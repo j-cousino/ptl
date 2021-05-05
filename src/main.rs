@@ -111,7 +111,7 @@ fn do_total() {
         let mut duration = chrono::Duration::days(0);
         for elem in timelog.entries.iter() {
             if elem.email == *email {
-                duration = duration + (elem.stop.unwrap_or_else(|| elem.start) - elem.start);
+                duration = duration + (elem.stop.unwrap_or(elem.start) - elem.start);
             }
         }
         println!(
