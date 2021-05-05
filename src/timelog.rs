@@ -26,6 +26,8 @@ pub struct Timelog {
 
 impl Timelog {
     pub fn new(e: &str) -> Timelog {
-        Timelog { entries: vec![LogEntry::new(e)], }
+        Timelog {
+            entries: vec![LogEntry::new(e)],
+        }
     }
 }

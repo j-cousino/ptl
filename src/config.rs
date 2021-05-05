@@ -21,21 +21,19 @@ impl Config {
         }
     }
 
-
     /// Gather the config info
-    /// 
+    ///
     /// Gather the confing info from a toml formated file. The file is stored in the
     /// platform dependant directory computed by the directories crate.
-    /// 
+    ///
     /// # Panics
-    /// 
+    ///
     /// If the config file can't be found or created
     pub fn gather() -> Config {
         let mut config = Config::default();
 
         // Build the path for the users config dir.
         if let Some(mut cfg_path) = get_config_path() {
-            
             cfg_path.push("config");
 
             // If we cant read the file we fill in defaults for State
@@ -49,7 +47,6 @@ impl Config {
         }
 
         config
-    
     }
 
     /// Returns the email valueconfig
@@ -64,12 +61,10 @@ impl Config {
 /// computed by the directories crate.
 pub fn get_config_path() -> Option<PathBuf> {
     let dir_name = format!(".{}", env!("CARGO_BIN_NAME"));
- 
+
     // Build the path for the users config dir.
     Some(BaseDirs::new().unwrap().config_dir().join(dir_name))
-
 }
-
 
 #[cfg(test)]
 mod tests {
@@ -91,6 +86,6 @@ mod tests {
     #[test]
     fn test_config_gather() {
         let config = Config::gather();
-        assert_ne!( *config.email(), String::from("anonymous"));
+        assert_ne!(*config.email(), String::from("anonymous"));
     }
 }

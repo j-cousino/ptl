@@ -21,12 +21,12 @@
 //! ```console, no_run
 //! ptl total
 //! ```
-//! 
+//!
 mod config;
 mod timelog;
 
-use std::path::Path;
 use std::fs;
+use std::path::Path;
 use structopt::StructOpt;
 
 #[derive(StructOpt)]
@@ -51,51 +51,47 @@ fn main() {
 }
 
 fn do_start() {
-
     let path = Path::new("plt.toml");
     let config = config::Config::gather();
     let mut timelog = timelog::Timelog::new(config.email());
-    
+
     // See if the file exists if it does load it.
     if path.exists() {
         let toml_str = fs::read_to_string(path).unwrap();
         timelog = toml::from_str(&toml_str).unwrap();
-        
+
         // Of the last entry doesnt have a stop time give a warning
-        if timelog.entries[timelog.entries.len()-1].stop == None {
+        if timelog.entries[timelog.entries.len() - 1].stop == None {
             println!("Warning: Last entry hasn't been completed!");
             return;
         }
         // Otherwise create a new entry
         timelog.entries.push(timelog::LogEntry::new(config.email()));
-        
     }
 
     let toml_str = toml::to_string(&timelog);
     fs::write(path, toml_str.unwrap()).unwrap();
-
 }
 
 fn do_stop() {
     let path = Path::new("plt.toml");
     let config = config::Config::gather();
     let mut timelog = timelog::Timelog::new(config.email());
-    
+
     // See if the file exists if it does load it.
     if path.exists() {
         let toml_str = fs::read_to_string(path).unwrap();
         timelog = toml::from_str(&toml_str).unwrap();
-        
+
         // If the last entry doesnt has a stop time give a warning
-        let idx = timelog.entries.len()-1;
-    
-        if timelog.entries[idx].stop  != None {
+        let idx = timelog.entries.len() - 1;
+
+        if timelog.entries[idx].stop != None {
             println!("Warning: Haven't started working on this project!");
-            return;    
-       } 
+            return;
+        }
         // Otherwise create stop entry
         timelog.entries[idx].stop = Some(chrono::Local::now());
-     
     }
 
     let toml_str = toml::to_string(&timelog);
@@ -115,11 +111,15 @@ fn do_total() {
         let mut duration = chrono::Duration::days(0);
         for elem in timelog.entries.iter() {
             if elem.email == *email {
-                duration = duration + ( elem.stop.unwrap_or_else( || elem.start ) - elem.start );
+                duration = duration + (elem.stop.unwrap_or_else(|| elem.start) - elem.start);
             }
         }
-        println!( "{} {}:{} H:M", email, duration.num_hours(), duration.num_minutes());
-
+        println!(
+            "{} {}:{} H:M",
+            email,
+            duration.num_hours(),
+            duration.num_minutes()
+        );
     } else {
         println!("Warning: No time log exists")
     }
