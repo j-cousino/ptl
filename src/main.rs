@@ -83,15 +83,18 @@ fn do_stop() {
         let toml_str = fs::read_to_string(path).unwrap();
         timelog = toml::from_str(&toml_str).unwrap();
 
-        // If the last entry doesnt has a stop time give a warning
+        // If the last entry has a stop time give a warning
         let idx = timelog.entries.len() - 1;
 
-        if timelog.entries[idx].stop != None {
+        if timelog.entries[idx].stop != None ||
+            timelog.entries[idx].email != *config.email() {
             println!("Warning: Haven't started working on this project!");
             return;
         }
         // Otherwise create stop entry
         timelog.entries[idx].stop = Some(chrono::Local::now());
+    }else {
+        return;
     }
 
     let toml_str = toml::to_string(&timelog);
