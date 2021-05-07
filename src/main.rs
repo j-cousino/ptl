@@ -76,7 +76,7 @@ fn do_start() {
 fn do_stop() {
     let path = Path::new("plt.toml");
     let config = config::Config::gather();
-    let mut timelog = timelog::Timelog::new(config.email());
+    let mut timelog: timelog::Timelog;
 
     // See if the file exists if it does load it.
     if path.exists() {
