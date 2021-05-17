@@ -51,7 +51,8 @@ fn main() {
 }
 
 fn do_start() {
-    let path = Path::new("plt.toml");
+    let file_name = format!("{}.toml", env!("CARGO_BIN_NAME"));
+    let path = Path::new(&file_name);
     let config = config::Config::gather();
     let mut timelog = timelog::Timelog::new(config.email());
 
@@ -74,7 +75,8 @@ fn do_start() {
 }
 
 fn do_stop() {
-    let path = Path::new("plt.toml");
+    let file_name = format!("{}.toml", env!("CARGO_BIN_NAME"));
+    let path = Path::new(&file_name);
     let config = config::Config::gather();
     let mut timelog: timelog::Timelog;
 
@@ -102,7 +104,8 @@ fn do_stop() {
 }
 
 fn do_total() {
-    let path = Path::new("plt.toml");
+    let file_name = format!("{}.toml", env!("CARGO_BIN_NAME"));
+    let path = Path::new(&file_name);
     let config = config::Config::gather();
     let email = config.email();
 
